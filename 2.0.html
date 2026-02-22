@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NIMAT et fils sarl — Plan Boutique</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --vert: #2F5D50;
+    --vert-dark: #1e3d35;
+    --vert-light: #d4e8e2;
+    --beige: #E8DFC8;
+    --brun: #8A5A3B;
+    --brun-light: #c4956a;
+    --ivoire: #F5F1E8;
+    --or: #C6A75E;
+    --or-light: #f0e4c4;
+    --bleu: #6496c8;
+    --bleu-light: #ddeaf7;
+    --mur: #5a4a35;
+    --wall-fill: #c8b89a;
+    --text-dark: #2a1f10;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--ivoire);
+    min-height: 100vh;
+    color: var(--text-dark);
+  }
+
+  /* HEADER */
+  header {
+    background: var(--vert);
+    padding: 14px 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid var(--or);
+    box-shadow: 0 2px 12px rgba(47,93,80,.2);
+  }
+  .logo { display:flex; align-items:center; gap:14px; }
+  .emblem {
+    width:46px; height:46px; border-radius:50%;
+    border:2px solid var(--or);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Playfair Display',serif; font-size:20px; font-weight:700; color:var(--or);
+    background: rgba(198,167,94,.1);
+  }
+  .brand { font-family:'Playfair Display',serif; font-size:20px; letter-spacing:3px; color:white; }
+  .brand-sub { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--or); margin-top:2px; }
+  .header-tag { font-size:11px; letter-spacing:2px; color:var(--or); text-align:right; }
+
+  /* MAIN */
+  main {
+    display: grid;
+    grid-template-columns: 4fr 2fr;
+    gap: 0;
+    height: calc(100vh - 69px);
+  }
+
+  /* PLAN AREA */
+  .plan-area {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow: hidden;
+    background: var(--ivoire);
+  }
+  .plan-header {
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .plan-title {
+    font-family:'Playfair Display',serif;
+    font-size:17px; color:var(--vert);
+  }
+  .plan-hint {
+    font-size:11px; color:rgba(47,93,80,.5);
+    letter-spacing:1px; text-transform:uppercase;
+  }
+
+  /* SVG wrapper */
+  .svg-wrap {
+    flex: 1;
+    background: white;
+    border-radius: 10px;
+    border: 1.5px solid rgba(47,93,80,.15);
+    box-shadow: 0 4px 24px rgba(47,93,80,.08);
+    overflow: hidden;
+  }
+  .floor-svg { width:100%; height:100%; }
+
+  /* Interactive zones */
+  .zone { cursor: pointer; }
+  .zone-bg { transition: opacity .2s; }
+  .zone:hover .zone-bg { opacity: 1 !important; }
+  .zone.active .zone-bg { opacity: 1 !important; }
+
+  /* LEGEND */
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .leg {
+    display:flex; align-items:center; gap:6px;
+    font-size:11px; color:rgba(42,31,16,.6);
+    cursor:pointer; padding:4px 10px;
+    border-radius:20px; border:1px solid transparent;
+    transition: all .2s; background: white;
+  }
+  .leg:hover, .leg.active {
+    border-color: var(--vert); color: var(--vert);
+    background: var(--vert-light);
+  }
+  .leg-dot { width:10px; height:10px; border-radius:2px; flex-shrink:0; }
+
+  /* SIDEBAR */
+  .sidebar {
+    background: white;
+    border-left: 1.5px solid rgba(47,93,80,.1);
+    padding: 20px 18px;
+    display: flex; flex-direction: column; gap: 14px;
+    overflow-y: auto;
+  }
+
+  .info-panel {
+    background: var(--ivoire);
+    border: 1px solid rgba(47,93,80,.15);
+    border-radius: 10px; padding: 18px;
+    display: none;
+    animation: fadeUp .25s ease;
+    border-left: 4px solid var(--vert);
+  }
+  .info-panel.visible { display: block; }
+  .info-panel.default-panel {
+    background: linear-gradient(135deg, var(--vert-light), white);
+    border-left: 4px solid var(--vert);
+    display: block;
+  }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(8px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+
+  .panel-icon { font-size:28px; margin-bottom:8px; }
+  .panel-title {
+    font-family:'Playfair Display',serif;
+    font-size:15px; color:var(--vert); margin-bottom:7px;
+  }
+  .panel-desc { font-size:12px; color:rgba(42,31,16,.7); line-height:1.7; }
+  .panel-tags { margin-top:10px; display:flex; flex-wrap:wrap; gap:5px; }
+  .tag {
+    background: var(--vert-light); color:var(--vert);
+    font-size:10px; font-weight:600; padding:3px 9px;
+    border-radius:20px; letter-spacing:.5px;
+    border: 1px solid rgba(47,93,80,.2);
+  }
+
+  /* Dimensions badge */
+  .dim-badge {
+    display: inline-block;
+    background: var(--or-light); color: var(--brun);
+    font-size:10px; font-weight:600; padding:2px 8px;
+    border-radius:4px; margin-top:8px;
+    border:1px solid rgba(198,167,94,.4);
+  }
+
+  /* Stats */
+  .stats-box {
+    background: var(--vert);
+    border-radius:10px; padding:16px;
+  }
+  .stats-title { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--or); margin-bottom:12px; }
+  .stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .stat { text-align:center; }
+  .stat-n { font-family:'Playfair Display',serif; font-size:26px; color:white; display:block; }
+  .stat-l { font-size:9px; color:var(--beige); opacity:.7; text-transform:uppercase; letter-spacing:1px; }
+
+  /* Products */
+  .products-box {
+    background: var(--ivoire);
+    border: 1px solid rgba(47,93,80,.1);
+    border-radius:10px; padding:16px;
+  }
+  .prod-title { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--or); margin-bottom:10px; font-weight:600; }
+  .prod-row {
+    display:flex; align-items:center; gap:8px;
+    padding:6px 0; border-bottom:1px solid rgba(47,93,80,.08);
+    font-size:12px; color:rgba(42,31,16,.7);
+  }
+  .prod-row:last-child { border-bottom:none; }
+  .prod-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+
+  /* Pulse animation */
+  @keyframes pulse { 0%,100%{opacity:.9;} 50%{opacity:.3;} }
+  .pulse { animation: pulse 2s infinite; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="emblem">N</div>
+    <div>
+      <div class="brand">NIMAT</div>
+      <div class="brand-sub">et fils sarl · Produits Naturels & Gourmands</div>
+    </div>
+  </div>
+  <div class="header-tag">Plan aménagé interactif<br>Ech. 1/50 · 830 × 830 cm · Bénin</div>
+</header>
+
+<main>
+  <!-- PLAN -->
+  <div class="plan-area">
+    <div class="plan-header">
+      <div class="plan-title">Vue en Plan Aménagé du Projet</div>
+      <div class="plan-hint">← Cliquez sur une zone</div>
+    </div>
+
+    <div class="svg-wrap">
+      <svg class="floor-svg" viewBox="0 0 760 720" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- Hatch pattern for walls -->
+          <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <rect width="6" height="6" fill="#c8b89a"/>
+            <line x1="0" y1="0" x2="0" y2="6" stroke="#8a7a60" stroke-width="1.5"/>
+          </pattern>
+          <!-- Wood floor -->
+          <pattern id="wood" width="30" height="8" patternUnits="userSpaceOnUse">
+            <rect width="30" height="8" fill="#f8f4ec"/>
+            <line x1="0" y1="0" x2="30" y2="0" stroke="#ede5d4" stroke-width=".4"/>
+            <line x1="0" y1="4" x2="30" y2="4" stroke="#ede5d4" stroke-width=".3"/>
+          </pattern>
+          <!-- Back zone floor -->
+          <pattern id="tile" width="16" height="16" patternUnits="userSpaceOnUse">
+            <rect width="16" height="16" fill="#f0ebe0"/>
+            <rect width="8" height="8" fill="#ebe5d8"/>
+            <rect x="8" y="8" width="8" height="8" fill="#ebe5d8"/>
+          </pattern>
+          <filter id="sh">
+            <feDropShadow dx="1" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,.12)"/>
+          </filter>
+        </defs>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- BACKGROUND / OUTER ZONE -->
+        <!-- ══════════════════════════════════════ -->
+        <rect x="0" y="0" width="760" height="720" fill="#eee8da"/>
+
+        <!-- POST entrance top -->
+        <ellipse cx="385" cy="42" rx="40" ry="20" fill="#e0d8c8" stroke="#8a7a60" stroke-width="1.5"/>
+        <text x="385" y="47" text-anchor="middle" font-family="Jost,sans-serif" font-size="11" fill="#5a4a35" font-weight="600" letter-spacing="1">POST</text>
+
+        <!-- MAIN ENTRANCE bottom -->
+        <ellipse cx="385" cy="668" rx="44" ry="20" fill="#e0d8c8" stroke="#2F5D50" stroke-width="1.5"/>
+        <text x="385" y="661" text-anchor="middle" font-family="Jost,sans-serif" font-size="9" fill="#2F5D50" font-weight="600" letter-spacing="1">PRINCIPALE</text>
+        <text x="385" y="673" text-anchor="middle" font-family="Jost,sans-serif" font-size="8" fill="#2F5D50">↑</text>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- OUTER WALLS (thick hatch) -->
+        <!-- ══════════════════════════════════════ -->
+        <!-- Top wall -->
+        <rect x="105" y="62" width="550" height="18" fill="url(#hatch)" stroke="#5a4a35" stroke-width="1.5"/>
+        <!-- Bottom wall -->
+        <rect x="105" y="630" width="550" height="18" fill="url(#hatch)" stroke="#5a4a35" stroke-width="1.5"/>
+        <!-- Left wall -->
+        <rect x="105" y="62" width="18" height="586" fill="url(#hatch)" stroke="#5a4a35" stroke-width="1.5"/>
+        <!-- Right wall -->
+        <rect x="637" y="62" width="18" height="586" fill="url(#hatch)" stroke="#5a4a35" stroke-width="1.5"/>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- INTERIOR FLOOR -->
+        <!-- ══════════════════════════════════════ -->
+        <!-- Main floor (espace vente) -->
+        <rect x="123" y="80" width="514" height="568" fill="url(#wood)"/>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- BACK ZONE DIVIDER WALL -->
+        <!-- ══════════════════════════════════════ -->
+        <rect x="123" y="80" width="514" height="210" fill="url(#tile)" opacity=".6"/>
+        <rect x="123" y="282" width="514" height="12" fill="url(#hatch)" stroke="#5a4a35" stroke-width="1"/>
+
+        <!-- VERTICAL WALL: stockage | espace pers -->
+        <rect x="388" y="80" width="12" height="202" fill="url(#hatch)" stroke="#5a4a35" stroke-width="1"/>
+
+        <!-- VERTICAL WALL: espace pers | toil prsl -->
+        <rect x="520" y="80" width="12" height="100" fill="url(#hatch)" stroke="#5a4a35" stroke-width="1"/>
+
+        <!-- HORIZONTAL WALL: toil prsl | toil visit -->
+        <rect x="520" y="175" width="117" height="10" fill="url(#hatch)" stroke="#5a4a35" stroke-width="1"/>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- ZONE 1: MAGASIN DE STOCKAGE -->
+        <!-- ══════════════════════════════════════ -->
+        <g class="zone" id="z-stock" onclick="activate('stock')">
+          <rect class="zone-bg" x="123" y="80" width="265" height="202" fill="#8A5A3B" opacity=".06"/>
+
+          <!-- Door arc (to post) -->
+          <path d="M340,80 Q340,135 285,135" fill="none" stroke="#5a4a35" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <rect x="285" y="80" width="55" height="8" fill="#e8ddc8" stroke="#8a7a60" stroke-width="1"/>
+
+          <!-- ═══ GONDOLES MURAL STOCKAGE (3 grandes gondoles collées au mur du haut) ═══ -->
+
+          <!-- GONDOLE 1 — collée au mur haut gauche -->
+          <rect x="123" y="80" width="60" height="22" rx="0" fill="#5a3a20" stroke="#3a2010" stroke-width="1.5"/>
+          <rect x="125" y="82" width="56" height="18" rx="1" fill="#7a5030" opacity=".9"/>
+          <!-- tablettes gondole 1 -->
+          <rect x="123" y="102" width="60" height="3" fill="#3a2010"/>
+          <rect x="123" y="125" width="60" height="3" fill="#3a2010"/>
+          <rect x="123" y="148" width="60" height="3" fill="#3a2010"/>
+          <rect x="123" y="171" width="60" height="3" fill="#3a2010"/>
+          <rect x="123" y="194" width="60" height="3" fill="#3a2010"/>
+          <rect x="123" y="217" width="60" height="3" fill="#3a2010"/>
+          <rect x="123" y="240" width="60" height="3" fill="#3a2010"/>
+          <rect x="123" y="263" width="60" height="3" fill="#3a2010"/>
+          <!-- produits gondole 1 -->
+          <rect x="126" y="105" width="12" height="18" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="140" y="107" width="12" height="16" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="154" y="105" width="12" height="18" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="168" y="107" width="12" height="16" rx="1" fill="#8A5A3B" opacity=".9"/>
+          <rect x="126" y="128" width="12" height="18" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="140" y="130" width="12" height="16" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="154" y="128" width="12" height="18" rx="1" fill="#8A5A3B" opacity=".9"/>
+          <rect x="168" y="130" width="12" height="16" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="126" y="151" width="12" height="18" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="140" y="153" width="12" height="16" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="154" y="151" width="12" height="18" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="168" y="153" width="12" height="16" rx="1" fill="#8A5A3B" opacity=".9"/>
+          <rect x="126" y="174" width="12" height="18" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="140" y="176" width="12" height="16" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="154" y="174" width="12" height="18" rx="1" fill="#8A5A3B" opacity=".9"/>
+          <rect x="168" y="176" width="12" height="16" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="126" y="197" width="12" height="18" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="140" y="199" width="12" height="16" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="154" y="197" width="12" height="18" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="168" y="199" width="12" height="16" rx="1" fill="#8A5A3B" opacity=".9"/>
+          <rect x="126" y="220" width="12" height="18" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="140" y="222" width="12" height="16" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="154" y="220" width="12" height="18" rx="1" fill="#8A5A3B" opacity=".9"/>
+          <rect x="168" y="222" width="12" height="16" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="126" y="243" width="12" height="18" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="140" y="245" width="12" height="16" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="154" y="243" width="12" height="18" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="168" y="245" width="12" height="16" rx="1" fill="#8A5A3B" opacity=".9"/>
+          <!-- label gondole 1 -->
+          <text x="153" y="93" text-anchor="middle" font-family="Jost,sans-serif" font-size="8" fill="#f5edd8" font-weight="600" letter-spacing="1">GONDOLE 1</text>
+
+          <!-- GONDOLE 2 — milieu mur haut -->
+          <rect x="195" y="80" width="60" height="22" rx="0" fill="#5a3a20" stroke="#3a2010" stroke-width="1.5"/>
+          <rect x="197" y="82" width="56" height="18" rx="1" fill="#7a5030" opacity=".9"/>
+          <rect x="195" y="102" width="60" height="3" fill="#3a2010"/>
+          <rect x="195" y="125" width="60" height="3" fill="#3a2010"/>
+          <rect x="195" y="148" width="60" height="3" fill="#3a2010"/>
+          <rect x="195" y="171" width="60" height="3" fill="#3a2010"/>
+          <rect x="195" y="194" width="60" height="3" fill="#3a2010"/>
+          <rect x="195" y="217" width="60" height="3" fill="#3a2010"/>
+          <rect x="195" y="240" width="60" height="3" fill="#3a2010"/>
+          <rect x="195" y="263" width="60" height="3" fill="#3a2010"/>
+          <!-- produits gondole 2 -->
+          <rect x="198" y="105" width="12" height="18" rx="1" fill="#8A5A3B" opacity=".9"/>
+          <rect x="212" y="107" width="12" height="16" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="226" y="105" width="12" height="18" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="240" y="107" width="12" height="16" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="198" y="128" width="12" height="18" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="212" y="130" width="12" height="16" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="226" y="128" width="12" height="18" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="240" y="130" width="12" height="16" rx="1" fill="#8A5A3B" opacity=".9"/>
+          <rect x="198" y="151" width="12" height="18" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="212" y="153" width="12" height="16" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="226" y="151" width="12" height="18" rx="1" fill="#8A5A3B" opacity=".9"/>
+          <rect x="240" y="153" width="12" height="16" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="198" y="174" width="12" height="18" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="212" y="176" width="12" height="16" rx="1" fill="#8A5A3B" opacity=".9"/>
+          <rect x="226" y="174" width="12" height="18" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="240" y="176" width="12" height="16" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="198" y="197" width="12" height="18" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="212" y="199" width="12" height="16" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="226" y="197" width="12" height="18" rx="1" fill="#8A5A3B" opacity=".9"/>
+          <rect x="240" y="199" width="12" height="16" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="198" y="220" width="12" height="18" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="212" y="222" width="12" height="16" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="226" y="220" width="12" height="18" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="240" y="222" width="12" height="16" rx="1" fill="#8A5A3B" opacity=".9"/>
+          <rect x="198" y="243" width="12" height="18" rx="1" fill="#8A5A3B" opacity=".9"/>
+          <rect x="212" y="245" width="12" height="16" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="226" y="243" width="12" height="18" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="240" y="245" width="12" height="16" rx="1" fill="#C6A75E" opacity=".9"/>
+          <text x="225" y="93" text-anchor="middle" font-family="Jost,sans-serif" font-size="8" fill="#f5edd8" font-weight="600" letter-spacing="1">GONDOLE 2</text>
+
+          <!-- GONDOLE 3 — droite mur haut stockage -->
+          <rect x="267" y="80" width="60" height="22" rx="0" fill="#5a3a20" stroke="#3a2010" stroke-width="1.5"/>
+          <rect x="269" y="82" width="56" height="18" rx="1" fill="#7a5030" opacity=".9"/>
+          <rect x="267" y="102" width="60" height="3" fill="#3a2010"/>
+          <rect x="267" y="125" width="60" height="3" fill="#3a2010"/>
+          <rect x="267" y="148" width="60" height="3" fill="#3a2010"/>
+          <rect x="267" y="171" width="60" height="3" fill="#3a2010"/>
+          <rect x="267" y="194" width="60" height="3" fill="#3a2010"/>
+          <rect x="267" y="217" width="60" height="3" fill="#3a2010"/>
+          <rect x="267" y="240" width="60" height="3" fill="#3a2010"/>
+          <rect x="267" y="263" width="60" height="3" fill="#3a2010"/>
+          <!-- produits gondole 3 -->
+          <rect x="270" y="105" width="12" height="18" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="284" y="107" width="12" height="16" rx="1" fill="#8A5A3B" opacity=".9"/>
+          <rect x="298" y="105" width="12" height="18" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="312" y="107" width="12" height="16" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="270" y="128" width="12" height="18" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="284" y="130" width="12" height="16" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="298" y="128" width="12" height="18" rx="1" fill="#8A5A3B" opacity=".9"/>
+          <rect x="312" y="130" width="12" height="16" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="270" y="151" width="12" height="18" rx="1" fill="#8A5A3B" opacity=".9"/>
+          <rect x="284" y="153" width="12" height="16" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="298" y="151" width="12" height="18" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="312" y="153" width="12" height="16" rx="1" fill="#8A5A3B" opacity=".9"/>
+          <rect x="270" y="174" width="12" height="18" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="284" y="176" width="12" height="16" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="298" y="174" width="12" height="18" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="312" y="176" width="12" height="16" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="270" y="197" width="12" height="18" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="284" y="199" width="12" height="16" rx="1" fill="#8A5A3B" opacity=".9"/>
+          <rect x="298" y="197" width="12" height="18" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="312" y="199" width="12" height="16" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="270" y="220" width="12" height="18" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="284" y="222" width="12" height="16" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="298" y="220" width="12" height="18" rx="1" fill="#8A5A3B" opacity=".9"/>
+          <rect x="312" y="222" width="12" height="16" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="270" y="243" width="12" height="18" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="284" y="245" width="12" height="16" rx="1" fill="#C6A75E" opacity=".9"/>
+          <rect x="298" y="243" width="12" height="18" rx="1" fill="#2F5D50" opacity=".9"/>
+          <rect x="312" y="245" width="12" height="16" rx="1" fill="#8A5A3B" opacity=".9"/>
+          <text x="297" y="93" text-anchor="middle" font-family="Jost,sans-serif" font-size="8" fill="#f5edd8" font-weight="600" letter-spacing="1">GONDOLE 3</text>
+
+          <!-- Label -->
+          <text x="272" y="170" text-anchor="middle" font-family="Jost,sans-serif" font-size="13" fill="rgba(138,90,59,.6)" font-weight="500">Magasin de</text>
+          <text x="272" y="186" text-anchor="middle" font-family="Jost,sans-serif" font-size="13" fill="rgba(138,90,59,.6)" font-weight="500">stockage</text>
+        </g>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- ZONE 2: ESPACE PERSONNEL -->
+        <!-- ══════════════════════════════════════ -->
+        <g class="zone" id="z-perso" onclick="activate('perso')">
+          <rect class="zone-bg" x="400" y="80" width="120" height="95" fill="#C6A75E" opacity=".07"/>
+
+          <!-- Door arc -->
+          <path d="M400,175 Q400,130 440,130" fill="none" stroke="#5a4a35" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <rect x="400" y="175" width="8" height="40" fill="none"/>
+
+          <!-- Desk -->
+          <rect x="415" y="92" width="55" height="38" rx="2" fill="#d4c8a8" stroke="#8a7a60" stroke-width="1" filter="url(#sh)"/>
+          <rect x="418" y="95" width="42" height="26" rx="1" fill="#a8c8b8"/>
+          <rect x="422" y="98" width="34" height="18" rx="1" fill="#7ab0a0" opacity=".8"/>
+          <!-- Chair -->
+          <circle cx="442" cy="142" r="11" fill="#c4a888" stroke="#8a7a60" stroke-width="1" filter="url(#sh)"/>
+          <circle cx="442" cy="142" r="5" fill="#a88860"/>
+
+          <!-- Sofa -->
+          <rect x="475" y="92" width="38" height="52" rx="3" fill="#2F5D50" opacity=".4" stroke="#2F5D50" stroke-width="1"/>
+          <rect x="475" y="92" width="38" height="14" rx="2" fill="#2F5D50" opacity=".5"/>
+          <rect x="478" y="108" width="14" height="33" rx="2" fill="#3d7a68" opacity=".5"/>
+          <rect x="496" y="108" width="14" height="33" rx="2" fill="#3d7a68" opacity=".5"/>
+
+          <text x="460" y="168" text-anchor="middle" font-family="Jost,sans-serif" font-size="10" fill="rgba(198,167,94,.8)" font-weight="500" letter-spacing="1">ESP. PERS.</text>
+        </g>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- ZONE 3: TOIL PERSONNEL -->
+        <!-- ══════════════════════════════════════ -->
+        <g class="zone" id="z-toil-perso" onclick="activate('toilperso')">
+          <rect class="zone-bg" x="532" y="80" width="105" height="95" fill="#6496c8" opacity=".06"/>
+
+          <!-- Door arc -->
+          <path d="M532,170 Q532,130 572,130" fill="none" stroke="#5a4a35" stroke-width="1.2" stroke-dasharray="4,3"/>
+
+          <!-- WC -->
+          <ellipse cx="568" cy="148" rx="14" ry="18" fill="#dde8f0" stroke="#6496c8" stroke-width="1.2"/>
+          <ellipse cx="568" cy="138" rx="9" ry="8" fill="#dde8f0" stroke="#6496c8" stroke-width="1"/>
+          <!-- Sink -->
+          <rect x="597" y="88" width="28" height="22" rx="7" fill="#dde8f0" stroke="#6496c8" stroke-width="1.2"/>
+          <circle cx="611" cy="97" r="3" fill="#6496c8" opacity=".5"/>
+
+          <text x="584" y="168" text-anchor="middle" font-family="Jost,sans-serif" font-size="9" fill="rgba(100,150,200,.8)" letter-spacing=".5">TOIL. PRSL</text>
+        </g>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- ZONE 4: TOIL VISITEUR -->
+        <!-- ══════════════════════════════════════ -->
+        <g class="zone" id="z-toil-visit" onclick="activate('toilvisit')">
+          <rect class="zone-bg" x="532" y="185" width="105" height="97" fill="#6496c8" opacity=".06"/>
+
+          <!-- Door arc -->
+          <path d="M532,280 Q532,240 572,240" fill="none" stroke="#5a4a35" stroke-width="1.2" stroke-dasharray="4,3"/>
+
+          <!-- WC -->
+          <ellipse cx="568" cy="248" rx="14" ry="18" fill="#dde8f0" stroke="#6496c8" stroke-width="1.2"/>
+          <ellipse cx="568" cy="238" rx="9" ry="8" fill="#dde8f0" stroke="#6496c8" stroke-width="1"/>
+          <!-- Sink -->
+          <rect x="597" y="192" width="28" height="22" rx="7" fill="#dde8f0" stroke="#6496c8" stroke-width="1.2"/>
+          <circle cx="611" cy="201" r="3" fill="#6496c8" opacity=".5"/>
+
+          <text x="584" y="272" text-anchor="middle" font-family="Jost,sans-serif" font-size="9" fill="rgba(100,150,200,.8)" letter-spacing=".5">TOIL. VISIT.</text>
+        </g>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- ZONE 5: ESPACE VENTE (main area) -->
+        <!-- ══════════════════════════════════════ -->
+        <g class="zone" id="z-vente" onclick="activate('vente')">
+          <rect class="zone-bg" x="123" y="294" width="514" height="336" fill="#2F5D50" opacity=".03"/>
+
+          <!-- ── WALL SHELVES LEFT (3 units stacked) ── -->
+          <rect x="123" y="305" width="26" height="200" rx="2" fill="#c4956a" opacity=".75" stroke="#8A5A3B" stroke-width="1"/>
+          <line x1="123" y1="340" x2="149" y2="340" stroke="#8A5A3B" stroke-width="1"/>
+          <line x1="123" y1="375" x2="149" y2="375" stroke="#8A5A3B" stroke-width="1"/>
+          <line x1="123" y1="410" x2="149" y2="410" stroke="#8A5A3B" stroke-width="1"/>
+          <line x1="123" y1="445" x2="149" y2="445" stroke="#8A5A3B" stroke-width="1"/>
+          <line x1="123" y1="480" x2="149" y2="480" stroke="#8A5A3B" stroke-width="1"/>
+          <!-- Products left wall -->
+          <rect x="127" y="308" width="7" height="28" rx="1" fill="#2F5D50" opacity=".85"/>
+          <rect x="136" y="312" width="7" height="24" rx="1" fill="#C6A75E" opacity=".85"/>
+          <rect x="127" y="344" width="7" height="28" rx="1" fill="#C6A75E" opacity=".85"/>
+          <rect x="136" y="348" width="7" height="24" rx="1" fill="#2F5D50" opacity=".85"/>
+          <rect x="127" y="379" width="7" height="28" rx="1" fill="#8A5A3B" opacity=".85"/>
+          <rect x="136" y="383" width="7" height="24" rx="1" fill="#C6A75E" opacity=".85"/>
+          <rect x="127" y="414" width="7" height="28" rx="1" fill="#2F5D50" opacity=".85"/>
+          <rect x="136" y="418" width="7" height="24" rx="1" fill="#8A5A3B" opacity=".85"/>
+          <rect x="127" y="449" width="7" height="28" rx="1" fill="#C6A75E" opacity=".85"/>
+          <rect x="136" y="453" width="7" height="24" rx="1" fill="#2F5D50" opacity=".85"/>
+
+          <!-- ── WALL SHELVES RIGHT (5 cols × 4 rows — grand rayonnage) ── -->
+          <!-- Main tall shelving unit right wall -->
+          <rect x="611" y="305" width="26" height="280" rx="2" fill="#c4956a" opacity=".75" stroke="#8A5A3B" stroke-width="1.2"/>
+          <!-- Vertical dividers (5 columns) -->
+          <line x1="617" y1="305" x2="617" y2="585" stroke="#8A5A3B" stroke-width=".8"/>
+          <line x1="623" y1="305" x2="623" y2="585" stroke="#8A5A3B" stroke-width=".8"/>
+          <!-- Horizontal shelves -->
+          <line x1="611" y1="340" x2="637" y2="340" stroke="#8A5A3B" stroke-width="1"/>
+          <line x1="611" y1="375" x2="637" y2="375" stroke="#8A5A3B" stroke-width="1"/>
+          <line x1="611" y1="410" x2="637" y2="410" stroke="#8A5A3B" stroke-width="1"/>
+          <line x1="611" y1="445" x2="637" y2="445" stroke="#8A5A3B" stroke-width="1"/>
+          <line x1="611" y1="480" x2="637" y2="480" stroke="#8A5A3B" stroke-width="1"/>
+          <line x1="611" y1="515" x2="637" y2="515" stroke="#8A5A3B" stroke-width="1"/>
+          <line x1="611" y1="550" x2="637" y2="550" stroke="#8A5A3B" stroke-width="1"/>
+          <!-- Products right wall -->
+          <rect x="614" y="308" width="7" height="28" rx="1" fill="#2F5D50" opacity=".85"/>
+          <rect x="623" y="312" width="7" height="24" rx="1" fill="#C6A75E" opacity=".85"/>
+          <rect x="614" y="344" width="7" height="28" rx="1" fill="#C6A75E" opacity=".85"/>
+          <rect x="623" y="380" width="7" height="22" rx="1" fill="#2F5D50" opacity=".85"/>
+          <rect x="614" y="414" width="7" height="28" rx="1" fill="#8A5A3B" opacity=".85"/>
+          <rect x="623" y="450" width="7" height="22" rx="1" fill="#C6A75E" opacity=".85"/>
+          <rect x="614" y="484" width="7" height="28" rx="1" fill="#2F5D50" opacity=".85"/>
+          <rect x="623" y="518" width="7" height="22" rx="1" fill="#8A5A3B" opacity=".85"/>
+          <rect x="614" y="554" width="7" height="28" rx="1" fill="#C6A75E" opacity=".85"/>
+
+          <!-- ── FLOOR DISPLAY SHELVES (centre-right, 5col×4row) ── -->
+          <!-- Unit 1: right-centre standing shelves -->
+          <rect x="490" y="340" width="110" height="210" rx="3" fill="#e8dcc8" stroke="#8A5A3B" stroke-width="1.2" filter="url(#sh)"/>
+          <!-- 5 vertical column dividers -->
+          <line x1="512" y1="340" x2="512" y2="550" stroke="#8A5A3B" stroke-width=".8"/>
+          <line x1="534" y1="340" x2="534" y2="550" stroke="#8A5A3B" stroke-width=".8"/>
+          <line x1="556" y1="340" x2="556" y2="550" stroke="#8A5A3B" stroke-width=".8"/>
+          <line x1="578" y1="340" x2="578" y2="550" stroke="#8A5A3B" stroke-width=".8"/>
+          <!-- 4 horizontal shelves -->
+          <line x1="490" y1="393" x2="600" y2="393" stroke="#8A5A3B" stroke-width=".8"/>
+          <line x1="490" y1="446" x2="600" y2="446" stroke="#8A5A3B" stroke-width=".8"/>
+          <line x1="490" y1="499" x2="600" y2="499" stroke="#8A5A3B" stroke-width=".8"/>
+          <!-- Products on shelving unit -->
+          <rect x="494" y="344" width="14" height="46" rx="1" fill="#2F5D50" opacity=".7"/>
+          <rect x="516" y="347" width="14" height="43" rx="1" fill="#C6A75E" opacity=".7"/>
+          <rect x="538" y="344" width="14" height="46" rx="1" fill="#2F5D50" opacity=".7"/>
+          <rect x="560" y="347" width="14" height="43" rx="1" fill="#8A5A3B" opacity=".7"/>
+          <rect x="582" y="344" width="14" height="46" rx="1" fill="#C6A75E" opacity=".7"/>
+          <rect x="494" y="397" width="14" height="46" rx="1" fill="#C6A75E" opacity=".7"/>
+          <rect x="516" y="400" width="14" height="43" rx="1" fill="#2F5D50" opacity=".7"/>
+          <rect x="538" y="397" width="14" height="46" rx="1" fill="#8A5A3B" opacity=".7"/>
+          <rect x="560" y="400" width="14" height="43" rx="1" fill="#C6A75E" opacity=".7"/>
+          <rect x="582" y="397" width="14" height="46" rx="1" fill="#2F5D50" opacity=".7"/>
+          <rect x="494" y="450" width="14" height="46" rx="1" fill="#8A5A3B" opacity=".7"/>
+          <rect x="516" y="453" width="14" height="43" rx="1" fill="#C6A75E" opacity=".7"/>
+          <rect x="538" y="450" width="14" height="46" rx="1" fill="#2F5D50" opacity=".7"/>
+          <rect x="560" y="453" width="14" height="43" rx="1" fill="#8A5A3B" opacity=".7"/>
+          <rect x="582" y="450" width="14" height="46" rx="1" fill="#C6A75E" opacity=".7"/>
+          <rect x="494" y="503" width="14" height="44" rx="1" fill="#2F5D50" opacity=".7"/>
+          <rect x="516" y="505" width="14" height="42" rx="1" fill="#C6A75E" opacity=".7"/>
+          <rect x="538" y="503" width="14" height="44" rx="1" fill="#8A5A3B" opacity=".7"/>
+          <rect x="560" y="505" width="14" height="42" rx="1" fill="#2F5D50" opacity=".7"/>
+          <rect x="582" y="503" width="14" height="44" rx="1" fill="#C6A75E" opacity=".7"/>
+
+          <!-- ── 2 CENTRAL DISPLAY TABLES ── -->
+          <!-- Table 1 -->
+          <rect x="200" y="340" width="110" height="70" rx="4" fill="rgba(198,167,94,.15)" stroke="#C6A75E" stroke-width="1.5" filter="url(#sh)"/>
+          <rect x="204" y="344" width="18" height="28" rx="2" fill="#2F5D50" opacity=".65"/>
+          <rect x="225" y="347" width="18" height="25" rx="2" fill="#C6A75E" opacity=".65"/>
+          <rect x="246" y="344" width="18" height="28" rx="2" fill="#2F5D50" opacity=".65"/>
+          <rect x="267" y="347" width="18" height="25" rx="2" fill="#8A5A3B" opacity=".65"/>
+          <rect x="288" y="344" width="18" height="28" rx="2" fill="#C6A75E" opacity=".65"/>
+          <text x="255" y="426" text-anchor="middle" font-family="Jost,sans-serif" font-size="9" fill="rgba(198,167,94,.7)" letter-spacing="1">TABLE EXPO</text>
+
+          <!-- Table 2 -->
+          <rect x="200" y="450" width="110" height="70" rx="4" fill="rgba(198,167,94,.15)" stroke="#C6A75E" stroke-width="1.5" filter="url(#sh)"/>
+          <rect x="204" y="454" width="18" height="28" rx="2" fill="#C6A75E" opacity=".65"/>
+          <rect x="225" y="457" width="18" height="25" rx="2" fill="#2F5D50" opacity=".65"/>
+          <rect x="246" y="454" width="18" height="28" rx="2" fill="#C6A75E" opacity=".65"/>
+          <rect x="267" y="457" width="18" height="25" rx="2" fill="#8A5A3B" opacity=".65"/>
+          <rect x="288" y="454" width="18" height="28" rx="2" fill="#2F5D50" opacity=".65"/>
+          <text x="255" y="536" text-anchor="middle" font-family="Jost,sans-serif" font-size="9" fill="rgba(198,167,94,.7)" letter-spacing="1">TABLE EXPO</text>
+
+          <!-- ESPACE VENTE label -->
+          <text x="350" y="320" text-anchor="middle" font-family="Playfair Display,serif" font-size="16" fill="rgba(47,93,80,.25)" font-style="italic">Espace vente</text>
+        </g>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- ZONE 6: COMPTOIR + CHAISE -->
+        <!-- ══════════════════════════════════════ -->
+        <g class="zone" id="z-comptoir" onclick="activate('comptoir')" filter="url(#sh)">
+          <!-- Counter -->
+          <rect x="175" y="555" width="145" height="58" rx="5" fill="#2F5D50" stroke="#1e3d35" stroke-width="1.5"/>
+          <rect x="177" y="557" width="141" height="54" rx="4" fill="none" stroke="rgba(198,167,94,.4)" stroke-width="1"/>
+          <rect x="175" y="555" width="145" height="12" rx="4" fill="#3d7a68" opacity=".8"/>
+          <text x="248" y="589" text-anchor="middle" font-family="Jost,sans-serif" font-size="11" fill="#E8DFC8" font-weight="600" letter-spacing="2">COMPTOIR</text>
+
+          <!-- Chair beside counter -->
+          <rect x="155" y="548" width="16" height="20" rx="3" fill="#c4a888" stroke="#8a7a60" stroke-width="1"/>
+          <rect x="151" y="548" width="5" height="20" rx="2" fill="#a88860" stroke="#7a6040" stroke-width=".8"/>
+          <circle cx="163" cy="540" r="10" fill="#c4a888" stroke="#8a7a60" stroke-width="1"/>
+          <circle cx="163" cy="540" r="5" fill="#a88860"/>
+        </g>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- ENTRANCE / DOOR (bottom) -->
+        <!-- ══════════════════════════════════════ -->
+        <!-- Door opening -->
+        <rect x="300" y="630" width="170" height="18" fill="url(#wood)"/>
+        <!-- Left door panel -->
+        <rect x="300" y="630" width="80" height="12" fill="#e8dcc8" stroke="#8a7a60" stroke-width="1"/>
+        <!-- Right door panel -->
+        <rect x="390" y="630" width="80" height="12" fill="#e8dcc8" stroke="#8a7a60" stroke-width="1"/>
+        <!-- Door arc left -->
+        <path d="M300,630 Q300,600 330,600" fill="none" stroke="#8a7a60" stroke-width="1" stroke-dasharray="3,2"/>
+        <!-- Door arc right -->
+        <path d="M470,630 Q470,600 440,600" fill="none" stroke="#8a7a60" stroke-width="1" stroke-dasharray="3,2"/>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- WINDOWS (facade/top) -->
+        <!-- ══════════════════════════════════════ -->
+        <rect x="150" y="62" width="80" height="8" rx="2" fill="rgba(180,220,255,.6)" stroke="#aac8e8" stroke-width=".8"/>
+        <rect x="260" y="62" width="80" height="8" rx="2" fill="rgba(180,220,255,.6)" stroke="#aac8e8" stroke-width=".8"/>
+        <text x="190" y="54" text-anchor="middle" font-family="Jost,sans-serif" font-size="8" fill="#8ab0c8">fenêtre</text>
+        <text x="300" y="54" text-anchor="middle" font-family="Jost,sans-serif" font-size="8" fill="#8ab0c8">fenêtre</text>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- PULSE INDICATORS -->
+        <!-- ══════════════════════════════════════ -->
+        <circle class="pulse" cx="248" cy="578" r="5" fill="#2F5D50"/>
+        <circle class="pulse" cx="255" cy="400" r="4" fill="#C6A75E" style="animation-delay:.6s"/>
+        <circle class="pulse" cx="545" cy="440" r="4" fill="#C6A75E" style="animation-delay:1.2s"/>
+        <circle class="pulse" cx="200" cy="160" r="4" fill="#8A5A3B" style="animation-delay:1.8s"/>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- COMPASS -->
+        <!-- ══════════════════════════════════════ -->
+        <circle cx="706" cy="120" r="30" fill="rgba(47,93,80,.08)" stroke="#C6A75E" stroke-width="1.2"/>
+        <text x="706" y="108" text-anchor="middle" font-family="Jost,sans-serif" font-size="11" fill="#2F5D50" font-weight="700">N</text>
+        <polygon points="706,92 701,107 711,107" fill="#2F5D50" opacity=".8"/>
+        <polygon points="706,143 701,128 711,128" fill="rgba(47,93,80,.3)"/>
+        <text x="706" y="152" text-anchor="middle" font-family="Jost,sans-serif" font-size="9" fill="rgba(47,93,80,.4)">S</text>
+
+        <!-- Scale -->
+        <rect x="670" y="165" width="72" height="3" fill="rgba(47,93,80,.15)" rx="2"/>
+        <rect x="670" y="165" width="36" height="3" fill="rgba(47,93,80,.4)" rx="2"/>
+        <text x="706" y="178" text-anchor="middle" font-family="Jost,sans-serif" font-size="8" fill="rgba(47,93,80,.5)">Ech. 1/50</text>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- TITLE BLOCK (bottom right) -->
+        <!-- ══════════════════════════════════════ -->
+        <rect x="630" y="620" width="120" height="70" fill="white" stroke="#8a7a60" stroke-width="1"/>
+        <rect x="630" y="620" width="120" height="20" fill="#2F5D50"/>
+        <text x="690" y="634" text-anchor="middle" font-family="Jost,sans-serif" font-size="9" fill="white" font-weight="600" letter-spacing="1">NIMAT ET FILS</text>
+        <line x1="630" y1="640" x2="750" y2="640" stroke="#8a7a60" stroke-width=".8"/>
+        <text x="690" y="652" text-anchor="middle" font-family="Jost,sans-serif" font-size="7" fill="#5a4a35">Plan Aménagé · N° 01</text>
+        <line x1="630" y1="656" x2="750" y2="656" stroke="#8a7a60" stroke-width=".5"/>
+        <text x="690" y="666" text-anchor="middle" font-family="Jost,sans-serif" font-size="7" fill="#5a4a35">22/02/2026 · Ech. 1/50</text>
+        <line x1="630" y1="670" x2="750" y2="670" stroke="#8a7a60" stroke-width=".5"/>
+        <text x="690" y="682" text-anchor="middle" font-family="Jost,sans-serif" font-size="7" fill="#C6A75E">830 × 830 cm</text>
+      </svg>
+    </div>
+
+    <!-- LEGEND -->
+    <div class="legend">
+      <div class="leg" id="leg-stock" onclick="activate('stock')"><div class="leg-dot" style="background:#8A5A3B"></div>Stockage</div>
+      <div class="leg" id="leg-perso" onclick="activate('perso')"><div class="leg-dot" style="background:#C6A75E"></div>Esp. Personnel</div>
+      <div class="leg" id="leg-toilperso" onclick="activate('toilperso')"><div class="leg-dot" style="background:#6496c8"></div>WC Personnel</div>
+      <div class="leg" id="leg-toilvisit" onclick="activate('toilvisit')"><div class="leg-dot" style="background:#4a7ab0"></div>WC Visiteur</div>
+      <div class="leg" id="leg-vente" onclick="activate('vente')"><div class="leg-dot" style="background:#2F5D50"></div>Espace Vente</div>
+      <div class="leg" id="leg-comptoir" onclick="activate('comptoir')"><div class="leg-dot" style="background:#1e3d35"></div>Comptoir</div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <div class="info-panel default-panel" id="panel-default">
+      <div class="panel-icon">🏪</div>
+      <div class="panel-title">Boutique NIMAT et fils sarl</div>
+      <p class="panel-desc">Plan aménagé interactif basé sur les plans architecturaux officiels. Cliquez sur une zone pour explorer.</p>
+      <div class="dim-badge">830 × 830 cm · Ech. 1/50</div>
+      <div class="panel-tags">
+        <span class="tag">Bénin</span><span class="tag">6 Zones</span><span class="tag">22/02/2026</span>
+      </div>
+    </div>
+
+    <div class="info-panel" id="panel-stock" style="border-left-color:#8A5A3B">
+      <div class="panel-icon">📦</div>
+      <div class="panel-title">Magasin de Stockage</div>
+      <p class="panel-desc">Double rack d'étagères pour le stock produits NIMAT. Accès livraison via la porte "Post" à l'arrière sans passer par la vente. Porte intérieure communicante avec l'espace vente.</p>
+      <div class="dim-badge">350 × 200 cm</div>
+      <div class="panel-tags"><span class="tag">2 Racks</span><span class="tag">Porte Post</span><span class="tag">Livraisons</span></div>
+    </div>
+
+    <div class="info-panel" id="panel-perso" style="border-left-color:#C6A75E">
+      <div class="panel-icon">👤</div>
+      <div class="panel-title">Espace Personnel</div>
+      <p class="panel-desc">Bureau avec écran, chaise ergonomique et canapé pour la gestion administrative et les pauses de l'équipe NIMAT.</p>
+      <div class="dim-badge">240 × 95 cm</div>
+      <div class="panel-tags"><span class="tag">Bureau</span><span class="tag">Canapé</span><span class="tag">Privé</span></div>
+    </div>
+
+    <div class="info-panel" id="panel-toilperso" style="border-left-color:#6496c8">
+      <div class="panel-icon">🚿</div>
+      <div class="panel-title">Toilettes Personnel</div>
+      <p class="panel-desc">WC + lavabo réservés à l'équipe. Accès depuis l'espace personnel uniquement. Conforme aux normes ERP.</p>
+      <div class="dim-badge">180 × 95 cm</div>
+      <div class="panel-tags"><span class="tag">WC</span><span class="tag">Lavabo</span><span class="tag">Personnel</span></div>
+    </div>
+
+    <div class="info-panel" id="panel-toilvisit" style="border-left-color:#4a7ab0">
+      <div class="panel-icon">🚻</div>
+      <div class="panel-title">Toilettes Visiteurs</div>
+      <p class="panel-desc">WC + lavabo accessibles aux clients. Accès depuis l'espace vente via couloir latéral droit.</p>
+      <div class="dim-badge">180 × 97 cm</div>
+      <div class="panel-tags"><span class="tag">WC</span><span class="tag">Lavabo</span><span class="tag">Clients</span></div>
+    </div>
+
+    <div class="info-panel" id="panel-vente">
+      <div class="panel-icon">🛒</div>
+      <div class="panel-title">Espace de Vente</div>
+      <p class="panel-desc">Grande zone centrale avec rayonnage mural gauche, grand présentoir 5 colonnes × 4 rangées à droite, 2 tables d'exposition centrales et comptoir. Entrée double porte coulissante en façade.</p>
+      <div class="dim-badge">830 × 568 cm</div>
+      <div class="panel-tags"><span class="tag">Rayonnages</span><span class="tag">Présentoir 5×4</span><span class="tag">2 Tables</span><span class="tag">Double porte</span></div>
+    </div>
+
+    <div class="info-panel" id="panel-comptoir">
+      <div class="panel-icon">💚</div>
+      <div class="panel-title">Comptoir + Chaise</div>
+      <p class="panel-desc">Comptoir de caisse et conseil avec une chaise côté vendeur. Positionné au centre-bas de l'espace vente pour une circulation optimale.</p>
+      <div class="dim-badge">145 × 58 cm</div>
+      <div class="panel-tags"><span class="tag">Caisse</span><span class="tag">Chaise vendeur</span><span class="tag">Conseil</span></div>
+    </div>
+
+    <div class="stats-box">
+      <div class="stats-title">Données du projet</div>
+      <div class="stats-grid">
+        <div class="stat"><span class="stat-n">830</span><span class="stat-l">cm × 830</span></div>
+        <div class="stat"><span class="stat-n">6</span><span class="stat-l">Zones</span></div>
+        <div class="stat"><span class="stat-n">1/50</span><span class="stat-l">Échelle</span></div>
+        <div class="stat"><span class="stat-n">2</span><span class="stat-l">WC</span></div>
+      </div>
+    </div>
+
+    <div class="products-box">
+      <div class="prod-title">Produits en boutique</div>
+      <div class="prod-row"><div class="prod-dot" style="background:#2F5D50"></div>Granola Protéines 200g</div>
+      <div class="prod-row"><div class="prod-dot" style="background:#C6A75E"></div>Granola Enfants 100g</div>
+      <div class="prod-row"><div class="prod-dot" style="background:#8A5A3B"></div>Granola Classique</div>
+      <div class="prod-row"><div class="prod-dot" style="background:#2F5D50"></div>Coffrets Cadeaux</div>
+      <div class="prod-row"><div class="prod-dot" style="background:#C6A75E"></div>Pochons · Cuillères</div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+const zones = ['stock','perso','toilperso','toilvisit','vente','comptoir'];
+
+function activate(id) {
+  document.getElementById('panel-default').style.display = 'none';
+  zones.forEach(z => {
+    const p = document.getElementById('panel-' + z);
+    if (p) { p.classList.remove('visible'); p.style.display = 'none'; }
+    const l = document.getElementById('leg-' + z);
+    if (l) l.classList.remove('active');
+    const s = document.getElementById('z-' + z);
+    if (s) s.classList.remove('active');
+  });
+  const panel = document.getElementById('panel-' + id);
+  if (panel) { panel.style.display = 'block'; panel.classList.add('visible'); }
+  const leg = document.getElementById('leg-' + id);
+  if (leg) leg.classList.add('active');
+  const svgz = document.getElementById('z-' + id);
+  if (svgz) svgz.classList.add('active');
+}
+</script>
+</body>
+</html>
